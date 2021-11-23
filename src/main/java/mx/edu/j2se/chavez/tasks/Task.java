@@ -177,7 +177,7 @@ public class Task {
      */
 
     public int nextTimeAfter (int current){
-        if ((current >= this.end) || (!this.repetitive)) {
+        if ((current >= this.end) || (!this.isActive())) {
             return -1;
         } else if (current < this.start) {
             return this.start;

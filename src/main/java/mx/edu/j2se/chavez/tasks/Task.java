@@ -1,37 +1,8 @@
 package mx.edu.j2se.chavez.tasks;
 
-/**
- * Task is a base class for all basic tasks which allow to the
- * user create simple tasks according his necessities.
- *
- * A Task object encapsulate the state information related to when
- * the task it is going to occur, and it states.
- * This state information includes:
- *
- * <ul>
- * <li>The title of the task
- * <li>The time of starting.
- * <li>The time of finishing.
- * <li>The interval of time when the task it is going to occur.
- * <li>The current state that indicate if it is an active task or not.
- * <li>The current state that indicate if the task it is repetitive
- * </ul>
- * <p>
- * Tasks can be of two types:
- * <ul>
- *     <li>Normal Task
- *     <li>Repetitive Task
- * </ul>
- * The normal task can only happen once.
- * Meanwhile, Repetitive Task can happen many times according to it is
- * interval of time, and it is time of finish.
- * At the moment of create each new object Task it is created as an
- * inactive task.
- *
- * @author      Hector Chavez
- * @version     %I%, %G%
- * @since       1.0
- */
+import java.util.Objects;
+
+
 public class Task {
 
     /** The title of task */
@@ -189,5 +160,39 @@ public class Task {
             }
         }
         return -1;
+    }
+
+    /**
+     * <p>
+     *     Indicates whether some other Task is "equal to" this one.
+     * </p>
+     * @param object - the reference Task with which to compare.
+     * @return True if this object is the same as the object argument; false otherwise.
+     * @since 1.0
+     */
+    @Override
+    public boolean equals(Object object) {
+
+        // If the object is compared with itself then return true
+        if (object == this) {
+            return true;
+        }
+
+        /* Check if o is an instance of Complex or not
+          "null instanceof [type]" also returns false */
+        if (!(object instanceof Task)) {
+            return false;
+        }
+
+        // typecast taskAuxiliary to Complex so that we can compare data members
+        Task taskAuxiliary = (Task) object;
+
+        return (Objects.equals(taskAuxiliary.title, this.title)) &&
+                (taskAuxiliary.start == this.start) &&
+                (taskAuxiliary.end == this.end) &&
+                (taskAuxiliary.interval == this.interval) &&
+                (taskAuxiliary.state == this.state) &&
+                (taskAuxiliary.repetitive == this.repetitive);
+
     }
 }

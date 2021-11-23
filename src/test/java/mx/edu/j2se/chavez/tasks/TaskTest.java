@@ -87,4 +87,13 @@ public class TaskTest {
         //Verifica el funcionamiento del correcto del metodo nextTimeAfter
         Assert.assertEquals(12, normalTask.nextTimeAfter(11));
     }
+
+    @Test
+    public void testTaskEquals(){
+        Task repetitiveTask = new Task("Daily Sprint",20, 100, 10);
+        Task repetitiveTask2 = new Task("Daily Sprint",20, 100, 10);
+
+        Assert.assertEquals(repetitiveTask, repetitiveTask2);
+
+    }
 }

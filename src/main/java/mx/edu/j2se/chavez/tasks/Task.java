@@ -173,18 +173,14 @@ public class Task {
     @Override
     public boolean equals(Object object) {
 
-        // If the object is compared with itself then return true
         if (object == this) {
             return true;
         }
 
-        /* Check if o is an instance of Complex or not
-          "null instanceof [type]" also returns false */
         if (!(object instanceof Task)) {
             return false;
         }
 
-        // typecast taskAuxiliary to Complex so that we can compare data members
         Task taskAuxiliary = (Task) object;
 
         return (Objects.equals(taskAuxiliary.title, this.title)) &&

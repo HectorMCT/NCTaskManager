@@ -32,7 +32,7 @@ public class Task {
      * @since 1.0
      */
     Task(String title, int time) throws IllegalArgumentException {
-        if(time < 1){
+        if(time < 0){
             throw new IllegalArgumentException("Start time cannot be negative");
         }
         if(title == null || title.isEmpty()){
@@ -60,9 +60,9 @@ public class Task {
      */
     Task(String title, int start, int end, int interval) throws IllegalArgumentException {
         this(title, start);
-        if (interval < 1) {
+        if (interval < 0) {
             throw new IllegalArgumentException("Interval time cannot be negative");
-        } else if (end < 1) {
+        } else if (end < 0) {
             throw new IllegalArgumentException("End time cannot be negative");
         } else if (end == start) {
             throw new IllegalArgumentException("End time cannot be equals than Start time. It has to be greater");
@@ -134,7 +134,7 @@ public class Task {
      * @since 1.0
      */
     public void setTime(int time) throws IllegalArgumentException {
-        if(time < 1){
+        if(time < 0){
             throw new IllegalArgumentException("Time cannot be negative");
         }
         this.repetitive = false;
@@ -155,11 +155,11 @@ public class Task {
      * @since 1.0
      */
     public void setTime(int start, int end, int interval) throws IllegalArgumentException {
-        if(start < 1){
+        if(start < 0){
             throw new IllegalArgumentException("Start time cannot be negative");
-        } else if (end < 1) {
+        } else if (end < 0) {
             throw new IllegalArgumentException("End time cannot be negative");
-        } else if (interval < 1) {
+        } else if (interval < 0) {
             throw new IllegalArgumentException("Interval time cannot be negative");
         } else if (end == start) {
             throw new IllegalArgumentException("End time cannot be equals than Start time. It has to be greater");
@@ -197,7 +197,7 @@ public class Task {
      */
 
     public int nextTimeAfter (int current) throws IllegalArgumentException {
-        if(current < 1){
+        if(current < 0){
             throw new IllegalArgumentException("Current time cannot be negative");
         }
         if ((current >= this.end) || (!this.isActive())) {

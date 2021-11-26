@@ -34,10 +34,14 @@ public class ArrayTaskList {
      * the current array with the content of the auxiliary array and sort
      * the array using the QuickSort algorithm.
      * </p>
-     * @param task - A Task object that will be stored in the current array.
+     * @param task - A Task object that will be stored in the current array
+     * @throws NullPointerException - If the specified Task is null
      * @since 1.0
      */
-    public void add (Task task){
+    public void add (Task task) throws NullPointerException {
+        if (task == null){
+            throw new NullPointerException("The specified task is null");
+        }
         Task[] auxListOfTasks = new Task[listOfTasks.length + 1];
         System.arraycopy(this.listOfTasks, 0, auxListOfTasks, 0, this.listOfTasks.length);
         auxListOfTasks[auxListOfTasks.length - 1] = task;
@@ -49,9 +53,13 @@ public class ArrayTaskList {
      * <p> Removes the first occurrence of the specified element from this array, if it is present. </p>
      * @param task - A Task object to be removed from this array, if present
      * @return true if this Task array contained the specified element; false otherwise.
+     * @throws NullPointerException - If the specified Task is null
      * @since 1.0
      */
-    public boolean remove (Task task){
+    public boolean remove (Task task) throws NullPointerException {
+        if (task == null){
+            throw new NullPointerException("The specified task is null");
+        }
         int indexOfTask = 0;
         boolean flagTaskExist =  false;
         if (this.listOfTasks.length != 0) {
@@ -90,21 +98,36 @@ public class ArrayTaskList {
     /**
      * <p> Returns the Task at the specified position in this array. </p>
      * @param index - index of the element to return.
-     * @return The Task at the specified position in this Task.
+     * @return The Task at the specified position in this array.
      * @since 1.0
+     * @throws IndexOutOfBoundsException - If the specified index argument is negative, or if it is greater than or equal to the length of the specified array
      */
-    public Task getTask(int index){
-        return ((index < 0) || (index > listOfTasks.length)) ? null : this.listOfTasks[index];
+    public Task getTask(int index) throws IndexOutOfBoundsException {
+        if((index < 0) || (index > listOfTasks.length)) {
+            throw new IndexOutOfBoundsException("The index is negative, it is greater than or equal to the length of the specified array");
+        }
+        return this.listOfTasks[index];
     }
 
     /**
      * <p> Returns an ArrayTaskList of the specified range of time within this list. </p>
-     * @param from - low startTime (inclusive) of the subList
-     * @param to - high startTime (exclusive) of the subList
-     * @return An ArrayTaskList of the specified range of time within this list.
+     * @param from - low startTime (inclusive) of the subArray
+     * @param to - high startTime (exclusive) of the subArray
+     * @return An ArrayTaskList of the specified range of time within this array.
+     * @throws IllegalArgumentException - If the from-time or to-time are negative, or from-time are greater or equals to To-time
      * @since 1.0
      */
-    public ArrayTaskList incoming(int from, int to){
+    public ArrayTaskList incoming(int from, int to) throws IllegalArgumentException {
+
+        if(from < 1){
+            throw new IllegalArgumentException("From-time cannot be negative");
+        } else if (to < 1) {
+            throw new IllegalArgumentException("To-time cannot be negative");
+        } else if (from > to) {
+            throw new IllegalArgumentException("From-time cannot be greater than To-time");
+        } else if (from == to) {
+            throw new IllegalArgumentException("To-time cannot be equals than From-time. It has to be greater");
+        }
 
         ArrayTaskList arrayTaskList = new ArrayTaskList();
 

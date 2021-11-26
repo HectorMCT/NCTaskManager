@@ -6,7 +6,7 @@ import org.junit.Test;
 public class ArrayTaskListTest {
 
     @Test
-    public void testTaskRepetitive(){
+    public void testTaskList(){
 
         //Crea una instacia de un ArrayTaskList
         ArrayTaskList tareasSemanales = new ArrayTaskList();

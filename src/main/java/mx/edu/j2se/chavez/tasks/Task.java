@@ -30,13 +30,19 @@ public class Task {
      * @param time The time when the task it is going to happen.
      * @since 1.0
      */
-    Task(String title, int time){
-       this.title = title;
-       this.start = time;
-       this.end = time;
-       this.interval = 0;
-       this.state = false;
-       this.repetitive = false;
+    Task(String title, int time) throws IllegalArgumentException {
+        if(time < 1){
+            throw new IllegalArgumentException("Start time cannot be negative");
+        }
+        if(title == null || title.isEmpty()){
+            throw new IllegalArgumentException("Task cannot take in an empty String or null value for the \"title\" constructor");
+        }
+        this.title = title;
+        this.start = time;
+        this.end = time;
+        this.interval = 0;
+        this.state = false;
+        this.repetitive = false;
     }
 
     /**
@@ -49,8 +55,17 @@ public class Task {
      * @param interval The interval of time that indicate when the task happened.
      * @since 1.0
      */
-    Task(String title, int start, int end, int interval){
+    Task(String title, int start, int end, int interval) throws IllegalArgumentException {
         this(title, start);
+        if (interval < 1) {
+            throw new IllegalArgumentException("Interval time cannot be negative");
+        } else if (end < 1) {
+            throw new IllegalArgumentException("End time cannot be negative");
+        } else if (end == start) {
+            throw new IllegalArgumentException("End time cannot be equals than Start time. It has to be greater");
+        } else if (end < start) {
+            throw new IllegalArgumentException("End time cannot be less than Start time. It has to be greater");
+        }
         this.end = end;
         this.interval = interval;
         this.repetitive = true;
@@ -60,7 +75,10 @@ public class Task {
         return this.title;
     }
 
-    public void setTitle(String title) {
+    public void setTitle(String title) throws IllegalArgumentException {
+        if(title == null || title.isEmpty()){
+            throw new IllegalArgumentException("Task cannot take in an empty String or null value for the \"title\"");
+        }
         this.title = title;
     }
 
@@ -100,7 +118,10 @@ public class Task {
      * @param time The new time when the task it is going to be executed.
      * @since 1.0
      */
-    public void setTime(int time) {
+    public void setTime(int time) throws IllegalArgumentException {
+        if(time < 1){
+            throw new IllegalArgumentException("Time cannot be negative");
+        }
         this.repetitive = false;
         this.start = time;
         this.end = time;
@@ -117,7 +138,18 @@ public class Task {
      * @param interval The new interval of time when the task it is going to be executed.
      * @since 1.0
      */
-    public void setTime(int start, int end, int interval){
+    public void setTime(int start, int end, int interval) throws IllegalArgumentException {
+        if(start < 1){
+            throw new IllegalArgumentException("Start time cannot be negative");
+        } else if (end < 1) {
+            throw new IllegalArgumentException("End time cannot be negative");
+        } else if (interval < 1) {
+            throw new IllegalArgumentException("Interval time cannot be negative");
+        } else if (end == start) {
+            throw new IllegalArgumentException("End time cannot be equals than Start time. It has to be greater");
+        } else if (end < start) {
+            throw new IllegalArgumentException("End time cannot be less than Start time. It has to be greater");
+        }
         this.repetitive = true;
         this.start = start;
         this.end = end;
@@ -147,7 +179,10 @@ public class Task {
      * @since 1.0
      */
 
-    public int nextTimeAfter (int current){
+    public int nextTimeAfter (int current) throws IllegalArgumentException {
+        if(current < 1){
+            throw new IllegalArgumentException("Current time cannot be negative");
+        }
         if ((current >= this.end) || (!this.isActive())) {
             return -1;
         } else if (current < this.start) {

@@ -3,6 +3,9 @@ package mx.edu.j2se.chavez.tasks;
 import org.junit.Assert;
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThrows;
+
 public class TaskTest {
 
     @Test
@@ -11,12 +14,12 @@ public class TaskTest {
         Task repetitiveTask = new Task("Daily Sprint",20, 100, 10);
 
         //Corroboración el nombre de la tarea
-        Assert.assertEquals("Daily Sprint", repetitiveTask.getTitle());
+        assertEquals("Daily Sprint", repetitiveTask.getTitle());
 
         //Verifica sus tiempos
-        Assert.assertEquals(20, repetitiveTask.getStartTime());
-        Assert.assertEquals(100, repetitiveTask.getEndTime());
-        Assert.assertEquals(10, repetitiveTask.getRepeatInterval());
+        assertEquals(20, repetitiveTask.getStartTime());
+        assertEquals(100, repetitiveTask.getEndTime());
+        assertEquals(10, repetitiveTask.getRepeatInterval());
 
         //Verifica su estado inactivo y si es una tarea repetivia.
         Assert.assertFalse(repetitiveTask.isActive());
@@ -27,13 +30,13 @@ public class TaskTest {
         Assert.assertTrue(repetitiveTask.isActive());
 
         //Se comprueba que getTime devuelve el startTime de un Task repetitivo.
-        Assert.assertEquals(20, repetitiveTask.getTime());
+        assertEquals(20, repetitiveTask.getTime());
 
         //Test del metodo nextTimeAfter con diferentes valores actuales.
-        Assert.assertEquals(30, repetitiveTask.nextTimeAfter(20));
-        Assert.assertEquals(40, repetitiveTask.nextTimeAfter(36));
-        Assert.assertEquals(50, repetitiveTask.nextTimeAfter(45));
-        Assert.assertEquals(-1, repetitiveTask.nextTimeAfter(100));
+        assertEquals(30, repetitiveTask.nextTimeAfter(20));
+        assertEquals(40, repetitiveTask.nextTimeAfter(36));
+        assertEquals(50, repetitiveTask.nextTimeAfter(45));
+        assertEquals(-1, repetitiveTask.nextTimeAfter(100));
 
         //Convierte en un Task no repetitivo.
         repetitiveTask.setTime(15);
@@ -42,7 +45,7 @@ public class TaskTest {
         Assert.assertFalse(repetitiveTask.isRepeated());
 
         //Verificar sus nuevos posibles nextTimeAfter().
-        Assert.assertEquals(15, repetitiveTask.nextTimeAfter(10));
+        assertEquals(15, repetitiveTask.nextTimeAfter(10));
     }
 
     @Test
@@ -51,7 +54,7 @@ public class TaskTest {
         Task normalTask = new Task("Sprint Retrospective",6);
 
         //Corroboramos el nombre de la tarea
-        Assert.assertEquals("Sprint Retrospective", normalTask.getTitle());
+        assertEquals("Sprint Retrospective", normalTask.getTitle());
 
         normalTask.setTitle("Retrospectiva del Sprint");
         //Corroboramos el nombre de la tarea sea diferente al anterior
@@ -62,30 +65,30 @@ public class TaskTest {
         Assert.assertFalse(normalTask.isRepeated());
 
         //Verifica que su tiempo de intervalo sea 0
-        Assert.assertEquals(0, normalTask.getRepeatInterval());
+        assertEquals(0, normalTask.getRepeatInterval());
 
         //Activación.
         normalTask.setActive(true);
         Assert.assertTrue(normalTask.isActive());
 
         //Test del metodo nextTimeAfter con diferentes valores actuales.
-        Assert.assertEquals(6, normalTask.nextTimeAfter(5));
-        Assert.assertEquals(-1, normalTask.nextTimeAfter(6));
-        Assert.assertEquals(-1, normalTask.nextTimeAfter(7));
+        assertEquals(6, normalTask.nextTimeAfter(5));
+        assertEquals(-1, normalTask.nextTimeAfter(6));
+        assertEquals(-1, normalTask.nextTimeAfter(7));
 
         //Convertir el Task en repetitivo.
         normalTask.setTime(6,12, 3);
 
         //Verifica sus tiempos
-        Assert.assertEquals(6, normalTask.getStartTime());
-        Assert.assertEquals(12, normalTask.getEndTime());
-        Assert.assertEquals(3, normalTask.getRepeatInterval());
+        assertEquals(6, normalTask.getStartTime());
+        assertEquals(12, normalTask.getEndTime());
+        assertEquals(3, normalTask.getRepeatInterval());
 
         //Estado actual del Task.
         Assert.assertTrue(normalTask.isRepeated());
 
         //Verifica el funcionamiento del correcto del metodo nextTimeAfter
-        Assert.assertEquals(12, normalTask.nextTimeAfter(11));
+        assertEquals(12, normalTask.nextTimeAfter(11));
     }
 
     @Test
@@ -93,7 +96,132 @@ public class TaskTest {
         Task repetitiveTask = new Task("Daily Sprint",20, 100, 10);
         Task repetitiveTask2 = new Task("Daily Sprint",20, 100, 10);
 
-        Assert.assertEquals(repetitiveTask, repetitiveTask2);
+        assertEquals(repetitiveTask, repetitiveTask2);
 
+    }
+
+    @Test
+    public void testTaskExceptionConstructors(){
+
+        /*
+        * Validando excepciones para una tarea no repetitiva
+        * */
+        //Tiempo de inicio negativo
+        try{
+            Task repetitiveTask2 = new Task("Daily Sprint",-20);
+        } catch (IllegalArgumentException exception){
+            assertEquals("Start time cannot be negative", exception.getMessage());
+        }
+        //Sin titulo
+        try{
+            Task repetitiveTask2 = new Task("",20);
+        } catch (IllegalArgumentException exception){
+            assertEquals("Task cannot take in an empty String or null value for the \"title\" constructor", exception.getMessage());
+        }
+
+        /*
+         * Validando excepciones para una tarea repetitiva
+         * */
+        // Intervalo de tiempo negativo
+        try{
+            Task repetitiveTask2 = new Task("Daily Sprint",20, 50, -10);
+        } catch (IllegalArgumentException exception){
+            assertEquals("Interval time cannot be negative", exception.getMessage());
+        }
+        // Tiempo de finalización negativo
+        try{
+            Task repetitiveTask2 = new Task("Daily Sprint",20, -50, 10);
+        } catch (IllegalArgumentException exception){
+            assertEquals("End time cannot be negative", exception.getMessage());
+        }
+        // Tiempo de inicio y finalización iguales
+        try{
+            Task repetitiveTask2 = new Task("Daily Sprint",50, 50, 10);
+        } catch (IllegalArgumentException exception){
+            assertEquals("End time cannot be equals than Start time. It has to be greater", exception.getMessage());
+        }
+    }
+
+    @Test
+    public void testTaskExceptionMethods(){
+        /*
+         * Setting un titulo vacio
+         * */
+        try{
+            Task repetitiveTask2 = new Task("Daily Sprint",10, 50, 10);
+            repetitiveTask2.setTitle("");
+        } catch (IllegalArgumentException exception){
+            assertEquals("Task cannot take in an empty String or null value for the \"title\"", exception.getMessage());
+        }
+
+        /*
+         * Setting un start time negativo de repetitive a no repetitive Task
+         * */
+        try{
+            Task repetitiveTask2 = new Task("Daily Sprint",10, 50, 10);
+            repetitiveTask2.setTime(-10);
+        } catch (IllegalArgumentException exception){
+            assertEquals("Time cannot be negative", exception.getMessage());
+        }
+
+        /*
+         * Setting un start time negativo de no repetitive a repetitive Task
+         * */
+        try{
+            Task repetitiveTask2 = new Task("Daily Sprint",10);
+            repetitiveTask2.setTime(-20, 50, 10);
+        } catch (IllegalArgumentException exception){
+            assertEquals("Start time cannot be negative", exception.getMessage());
+        }
+
+        /*
+         * Setting un end time negativo de no repetitive a repetitive Task
+         * */
+        try{
+            Task repetitiveTask2 = new Task("Daily Sprint",10);
+            repetitiveTask2.setTime(20, -50, 10);
+        } catch (IllegalArgumentException exception){
+            assertEquals("End time cannot be negative", exception.getMessage());
+        }
+
+        /*
+         * Setting un interval time negativo de no repetitive a repetitive Task
+         * */
+        try{
+            Task repetitiveTask2 = new Task("Daily Sprint",10);
+            repetitiveTask2.setTime(20, 50, -10);
+        } catch (IllegalArgumentException exception){
+            assertEquals("Interval time cannot be negative", exception.getMessage());
+        }
+
+        /*
+         * Setting un end time negativo de no repetitive a repetitive Task
+         * */
+        try{
+            Task repetitiveTask2 = new Task("Daily Sprint",10);
+            repetitiveTask2.setTime(50, 50, 10);
+        } catch (IllegalArgumentException exception){
+            assertEquals("End time cannot be equals than Start time. It has to be greater", exception.getMessage());
+        }
+
+        /*
+         * Setting un interval time negativo de no repetitive a repetitive Task
+         * */
+        try{
+            Task repetitiveTask2 = new Task("Daily Sprint",10);
+            repetitiveTask2.setTime(70, 50, 10);
+        } catch (IllegalArgumentException exception){
+            assertEquals("End time cannot be less than Start time. It has to be greater", exception.getMessage());
+        }
+
+        /*
+         * Current time en nextTimeAfter negativo
+         * */
+        try{
+            Task repetitiveTask2 = new Task("Daily Sprint",70, 100, 10);
+            repetitiveTask2.nextTimeAfter(-1);
+        } catch (IllegalArgumentException exception){
+            assertEquals("Current time cannot be negative", exception.getMessage());
+        }
     }
 }

@@ -28,6 +28,7 @@ public class Task {
      * </p>
      * @param title The name of the task.
      * @param time The time when the task it is going to happen.
+     * @throws IllegalArgumentException - If the start time it is negative or if the title is an empty String or null value.
      * @since 1.0
      */
     Task(String title, int time) throws IllegalArgumentException {
@@ -53,6 +54,8 @@ public class Task {
      * @param start The time when the task it is going to start.
      * @param end The time when the task end.
      * @param interval The interval of time that indicate when the task happened.
+     * @throws IllegalArgumentException - If start time, end time or interval of time are negative,
+     * or if start time is greater or equals to end time. Also, if the title is an empty String or null value.
      * @since 1.0
      */
     Task(String title, int start, int end, int interval) throws IllegalArgumentException {
@@ -75,6 +78,17 @@ public class Task {
         return this.title;
     }
 
+    /**
+     * <p>
+     *     Set the new time the task it is going to be executed. If the task is a
+     *     repetitive one, the task become non-repetitive. The if this happened the
+     *     start time and end time set with the same value and the interval set
+     *     the value of zero.
+     * </p>
+     * @param title - Name to assign to the current Task.
+     * @throws IllegalArgumentException - If the title is an empty String or null value
+     * @since 1.0
+     */
     public void setTitle(String title) throws IllegalArgumentException {
         if(title == null || title.isEmpty()){
             throw new IllegalArgumentException("Task cannot take in an empty String or null value for the \"title\"");
@@ -116,6 +130,7 @@ public class Task {
      *     the value of zero.
      * </p>
      * @param time The new time when the task it is going to be executed.
+     * @throws IllegalArgumentException - If time it is negative.
      * @since 1.0
      */
     public void setTime(int time) throws IllegalArgumentException {
@@ -136,6 +151,7 @@ public class Task {
      * @param start The new start time when the task it is started.
      * @param end The new end time when the task it is ended.
      * @param interval The new interval of time when the task it is going to be executed.
+     * @throws IllegalArgumentException - If start time, end time or interval of time are negative, or if start time is greater or equals to end time.
      * @since 1.0
      */
     public void setTime(int start, int end, int interval) throws IllegalArgumentException {
@@ -176,6 +192,7 @@ public class Task {
      * @return The next start time of the task execution after the current time.
      * If the current time it is greater than the end time returns -1.
      * If the current time it is smaller than the start time returns the start time.
+     * @throws IllegalArgumentException - If the current time it is negative.
      * @since 1.0
      */
 
@@ -203,10 +220,15 @@ public class Task {
      * </p>
      * @param object - the reference Task with which to compare.
      * @return True if this object is the same as the object argument; false otherwise.
+     * @throws NullPointerException - If the specified Task is null
      * @since 1.0
      */
     @Override
-    public boolean equals(Object object) {
+    public boolean equals(Object object) throws NullPointerException{
+
+        if(object == null){
+            throw new NullPointerException("The specified task is null");
+        }
 
         if (object == this) {
             return true;

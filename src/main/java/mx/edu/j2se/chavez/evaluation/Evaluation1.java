@@ -30,9 +30,9 @@ public class Evaluation1 {
         circlesArray[0] = new Circle();
 
         int index = 1;
-        //Ademas se muestran los radios de los circulos
+        //Ademas se muestran los radios y las area de los circulos
         for (Circle circle : circlesArray) {
-            System.out.println("Circle: "+ index + " Radius: " + circle.getRadius());
+            System.out.println("Circle: "+ index + " Radius: " + circle.getRadius() + " Area: " + circle.getArea());
             index++;
         }
 

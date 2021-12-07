@@ -24,7 +24,7 @@ public class LinkedTaskListTest{
 
         //Se espera que la lista de tareas contenga 13 de ella.
         Assert.assertEquals(13, tareasSemanales.size());
-        tareasSemanales.showTasks();
+        //tareasSemanales.showTasks();
 
         Task nuevaTarea = tareasSemanales.getTask(0);
         Task nuevaTarea1 = tareasSemanales.getTask(6);
@@ -43,26 +43,26 @@ public class LinkedTaskListTest{
 
         //Eliminamos la nuevaTarea del arreglo.
         Assert.assertTrue(tareasSemanales.remove(nuevaTarea));
-        tareasSemanales.showTasks();
+        //tareasSemanales.showTasks();
 
         System.out.println("--------");
 
         //Eliminamos la nuevaTarea del arreglo.
         Assert.assertTrue(tareasSemanales.remove(nuevaTarea1));
-        tareasSemanales.showTasks();
+        //tareasSemanales.showTasks();
 
         System.out.println("--------");
 
         //Eliminamos la nuevaTarea del arreglo.
         Assert.assertTrue(tareasSemanales.remove(nuevaTarea2));
-        tareasSemanales.showTasks();
+        //tareasSemanales.showTasks();
 
         //Corroboramos que el tamaño de la tarea diminuyo en 1.
         //Se espera que la lista de tareas contenga 12 de ella.
         Assert.assertEquals(10, tareasSemanales.size());
 
         System.out.println("--------");
-        tareasSemanales.showTasks();
+        //tareasSemanales.showTasks();
         System.out.println("--------");
 
         nuevaTarea1 = tareasSemanales.getTask(0);
@@ -77,7 +77,7 @@ public class LinkedTaskListTest{
         //Eliminamos la nuevaTarea del arreglo.
         Assert.assertFalse(tareasSemanales.remove(nuevaTarea1));
         System.out.println("--------");
-        tareasSemanales.showTasks();
+        //tareasSemanales.showTasks();
     }
 
 
@@ -99,10 +99,10 @@ public class LinkedTaskListTest{
             tareasSemanales.add(auxiliatyTask);
         }
 
-        tareasSemanales.showTasks();
+        //tareasSemanales.showTasks();
 
-        LinkedTaskList subTareas = tareasSemanales.incoming(10,200);
+        LinkedTaskList subTareas = (LinkedTaskList) tareasSemanales.incoming(10,200);
 
-        subTareas.showTasks();
+        //subTareas.showTasks();
     }
 }

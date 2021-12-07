@@ -26,7 +26,7 @@ public class ArrayTaskListTest {
         //Se espera que la lista de tareas contenga 13 de ella.
         Assert.assertEquals(13, tareasSemanales.size());
         //Obtenemos las listas activas dentro del rango de 95 a 185 en tiempo
-        ArrayTaskList nuevasTareasSemanales = tareasSemanales.incoming(95, 185);
+        ArrayTaskList nuevasTareasSemanales = (ArrayTaskList) tareasSemanales.incoming(95, 185);
         //Se espera que se tengan al menos 4 tareas dentro de esta nueva lista.
         Assert.assertEquals(4, nuevasTareasSemanales.size());
 

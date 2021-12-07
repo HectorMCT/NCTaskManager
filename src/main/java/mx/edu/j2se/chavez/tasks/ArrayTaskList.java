@@ -10,7 +10,7 @@ package mx.edu.j2se.chavez.tasks;
  * @version     %I%, %G%
  * @since       1.0
  */
-public class ArrayTaskList {
+public class ArrayTaskList extends AbstractTaskList {
 
     /** Dynamic Array which store Task */
     private Task[] listOfTasks;
@@ -23,6 +23,7 @@ public class ArrayTaskList {
      */
     ArrayTaskList(){
         this.listOfTasks = new Task[0];
+        this.sizeList = 0;
     }
 
     /**
@@ -46,7 +47,7 @@ public class ArrayTaskList {
         System.arraycopy(this.listOfTasks, 0, auxListOfTasks, 0, this.listOfTasks.length);
         auxListOfTasks[auxListOfTasks.length - 1] = task;
         this.listOfTasks = auxListOfTasks;
-        sortArrayTask(this.listOfTasks, 0, listOfTasks.length - 1);
+        sizeList++;
     }
 
     /**
@@ -81,18 +82,10 @@ public class ArrayTaskList {
                     System.arraycopy(this.listOfTasks, indexOfTask + 1, auxListOfTasks, indexOfTask, this.listOfTasks.length - (indexOfTask + 1));
                     this.listOfTasks = auxListOfTasks;
                 }
+                sizeList--;
             }
         }
         return flagTaskExist;
-    }
-
-    /**
-     * <p> Returns the number of Task in this array. </p>
-     * @return The number of Task in this array.
-     * @since 1.0
-     */
-    public int size(){
-        return this.listOfTasks.length;
     }
 
     /**
@@ -103,89 +96,9 @@ public class ArrayTaskList {
      * @throws IndexOutOfBoundsException - If the specified index argument is negative, or if it is greater than or equal to the length of the specified array
      */
     public Task getTask(int index) throws IndexOutOfBoundsException {
-        if((index < 0) || (index > listOfTasks.length)) {
+        if((index < 0) || (index > this.sizeList - 1)) {
             throw new IndexOutOfBoundsException("The index is negative, it is greater than or equal to the length of the specified array");
         }
         return this.listOfTasks[index];
-    }
-
-    /**
-     * <p> Returns an ArrayTaskList of the specified range of time within this list. </p>
-     * @param from - low startTime (inclusive) of the subArray
-     * @param to - high startTime (exclusive) of the subArray
-     * @return An ArrayTaskList of the specified range of time within this array.
-     * @throws IllegalArgumentException - If the from-time or to-time are negative, or from-time are greater or equals to To-time
-     * @since 1.0
-     */
-    public ArrayTaskList incoming(int from, int to) throws IllegalArgumentException {
-
-        if(from < 1){
-            throw new IllegalArgumentException("From-time cannot be negative");
-        } else if (to < 1) {
-            throw new IllegalArgumentException("To-time cannot be negative");
-        } else if (from > to) {
-            throw new IllegalArgumentException("From-time cannot be greater than To-time");
-        } else if (from == to) {
-            throw new IllegalArgumentException("To-time cannot be equals than From-time. It has to be greater");
-        }
-
-        ArrayTaskList arrayTaskList = new ArrayTaskList();
-
-        if(this.listOfTasks == null){
-            arrayTaskList.listOfTasks = new Task[0];
-        } else {
-            int nextTimeAuxiliary;
-
-            for (Task taskAuxiliar : this.listOfTasks) {
-                nextTimeAuxiliary = taskAuxiliar.nextTimeAfter(from);
-                if ((nextTimeAuxiliary >= from) && (nextTimeAuxiliary <= to)) {
-                    arrayTaskList.add(taskAuxiliar);
-                }
-            }
-        }
-        return arrayTaskList;
-    }
-
-    /**
-     * <p> Sort this Task array implementing the QuickSort Algorithm. </p>
-     * @param listOfTasks - Array of Task to be sorted
-     * @param first - the index of the first element of the array.
-     * @param last - the index of the last element of the array.
-     * @since 1.0
-     */
-    private void sortArrayTask(Task[] listOfTasks, int first, int last){
-        if (first < last) {
-            int indexPartition = partition(listOfTasks, first, last);
-            sortArrayTask(listOfTasks, first, indexPartition);
-            sortArrayTask(listOfTasks, indexPartition + 1, last);
-        }
-    }
-
-    /**
-     * <p> Returns the index in the middle position of the subArray. </p>
-     * @param listOfTasks - Array of Task to be sorted
-     * @param first - the index of the first element of the subArray.
-     * @param last - the index of the last element of the subArray.
-     * @since 1.0
-     */
-    private int partition(Task[] listOfTasks, int first, int last) {
-        Task taskPivot = listOfTasks[first];
-        while (true){
-            while (listOfTasks[first].getStartTime() < taskPivot.getStartTime()){
-                first++;
-            }
-            while (listOfTasks[last].getStartTime() > taskPivot.getStartTime()){
-                last--;
-            }
-            if (first >= last){
-                return last;
-            } else {
-                Task temporalTask = listOfTasks[first];
-                listOfTasks[first] = listOfTasks[last];
-                listOfTasks[last] = temporalTask;
-                first++;
-                last--;
-            }
-        }
     }
 }

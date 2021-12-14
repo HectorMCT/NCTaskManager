@@ -1,6 +1,9 @@
 package mx.edu.j2se.chavez.tasks;
 
-public abstract class AbstractTaskList {
+import java.util.Iterator;
+import java.util.Objects;
+
+public abstract class AbstractTaskList implements Cloneable, Iterable<Task> {
 
     /** Size of the current list */
     protected Integer sizeList;
@@ -58,4 +61,52 @@ public abstract class AbstractTaskList {
         return this.sizeList;
     }
 
+
+    /**
+     * <p>
+     *     Indicates whether some other Task is "equal to" this one.
+     * </p>
+     * @param object - the reference Task with which to compare.
+     * @return True if this object is the same as the object argument; false otherwise.
+     * @throws NullPointerException - If the specified Task is null
+     * @since 1.0
+     */
+    @Override
+    public boolean equals(Object object) throws NullPointerException{
+
+        if(object == null){
+            throw new NullPointerException("The specified task is null");
+        }
+
+        if (object == this) {
+            return true;
+        }
+
+        if (getClass() != object.getClass()) {
+            return false;
+        }
+
+        if (!Objects.equals(this.sizeList, ((AbstractTaskList) object).sizeList)) {
+            return false;
+        }
+
+        Iterator<Task> auxiliaryIterator = ((AbstractTaskList) object).iterator();
+
+        for(Task taskIterator : this) {
+            if(!taskIterator.equals(auxiliaryIterator.next())) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    @Override
+    public AbstractTaskList clone() {
+        try {
+            return (AbstractTaskList) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
+    }
 }

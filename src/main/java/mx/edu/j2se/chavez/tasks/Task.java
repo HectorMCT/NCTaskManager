@@ -3,22 +3,22 @@ package mx.edu.j2se.chavez.tasks;
 import java.util.Objects;
 
 
-public class Task {
+public class Task implements Cloneable {
 
     /** The title of task */
     private String title;
     /** The time when the task it is start. */
-    private int start;
+    private Integer start;
     /** The time when the task it is ended. */
-    private int end;
+    private Integer end;
     /** The interval time when the task it is going to be executed. */
-    private int interval;
+    private Integer interval;
     /** The state of the task that indicate if it is active or not
      * At the moment of create a new object it set false which mean
      * it is an inactive task. */
-    private boolean state;
+    private Boolean state;
     /** Indicates if the task is repetitive (true) or it is a normal task (false).*/
-    private boolean repetitive;
+    private Boolean repetitive;
 
     /**
      * <p>This is the constructor for the repetitive task.
@@ -31,7 +31,7 @@ public class Task {
      * @throws IllegalArgumentException - If the start time it is negative or if the title is an empty String or null value.
      * @since 1.0
      */
-    Task(String title, int time) throws IllegalArgumentException {
+    public Task(String title, int time) throws IllegalArgumentException {
         if(time < 0){
             throw new IllegalArgumentException("Start time cannot be negative");
         }
@@ -58,7 +58,7 @@ public class Task {
      * or if start time is greater or equals to end time. Also, if the title is an empty String or null value.
      * @since 1.0
      */
-    Task(String title, int start, int end, int interval) throws IllegalArgumentException {
+    public Task(String title, int start, int end, int interval) throws IllegalArgumentException {
         this(title, start);
         if (interval < 0) {
             throw new IllegalArgumentException("Interval time cannot be negative");
@@ -241,11 +241,35 @@ public class Task {
         Task taskAuxiliary = (Task) object;
 
         return (Objects.equals(taskAuxiliary.title, this.title)) &&
-                (taskAuxiliary.start == this.start) &&
-                (taskAuxiliary.end == this.end) &&
-                (taskAuxiliary.interval == this.interval) &&
+                (Objects.equals(taskAuxiliary.start, this.start)) &&
+                (Objects.equals(taskAuxiliary.end, this.end)) &&
+                (Objects.equals(taskAuxiliary.interval, this.interval)) &&
                 (taskAuxiliary.state == this.state) &&
                 (taskAuxiliary.repetitive == this.repetitive);
 
+    }
+
+    @Override
+    public int hashCode(){
+        return 1000003 * this.title.hashCode() *
+                this.start.hashCode() *
+                this.end.hashCode() *
+                this.interval.hashCode() *
+                this.state.hashCode() *
+                this.repetitive.hashCode();
+    }
+
+    @Override
+    public String toString(){
+        return this.title + ", Starts: " + this.start.toString() + ", Ends: " + this.end.toString() + ", Each: " + this.interval.toString() + ", Active: " + this.state.toString() + ", Repetitive: " + this.repetitive.toString() ;
+    }
+
+    @Override
+    public Task clone() {
+        try {
+            return (Task) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 }

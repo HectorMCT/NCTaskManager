@@ -1,5 +1,6 @@
-package mx.edu.j2se.chavez.tasks;
+package mx.edu.j2se.chavez.tasks.tests;
 
+import mx.edu.j2se.chavez.tasks.Task;
 import org.junit.Assert;
 import org.junit.Test;
 

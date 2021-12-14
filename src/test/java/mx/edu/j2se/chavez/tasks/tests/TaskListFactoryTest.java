@@ -1,5 +1,9 @@
-package mx.edu.j2se.chavez.tasks;
+package mx.edu.j2se.chavez.tasks.tests;
 
+import mx.edu.j2se.chavez.tasks.ArrayTaskList;
+import mx.edu.j2se.chavez.tasks.LinkedTaskList;
+import mx.edu.j2se.chavez.tasks.ListTypes;
+import mx.edu.j2se.chavez.tasks.TaskListFactory;
 import org.junit.Test;
 
 import static org.junit.Assert.assertTrue;

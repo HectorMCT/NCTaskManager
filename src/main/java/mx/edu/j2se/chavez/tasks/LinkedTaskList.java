@@ -1,11 +1,17 @@
 package mx.edu.j2se.chavez.tasks;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Iterator;
+import java.util.Spliterator;
+import java.util.function.Consumer;
+
 public class LinkedTaskList extends AbstractTaskList {
 
     /** Pointer reference to the first task of the list */
-    private Node head;
+    private Node<Task> head;
     /** Pointer reference to the last task of the list */
-    private Node tail;
+    private Node<Task> tail;
 
     /**
      * <p>This is the constructor for the list of tasks.
@@ -14,7 +20,7 @@ public class LinkedTaskList extends AbstractTaskList {
      * </p>
      * @since 1.0
      */
-    LinkedTaskList(){
+    public LinkedTaskList(){
         this.head = null;
         this.tail = null;
         this.sizeList = 0;
@@ -33,13 +39,13 @@ public class LinkedTaskList extends AbstractTaskList {
             throw new NullPointerException("The specified task is null");
         }
 
-        Node newTaskListed =  new Node(task);
-        newTaskListed.next = null;
+        Node<Task> newTaskListed = new Node<>(task);
+        newTaskListed.setNext(null);
 
         if(this.head == null){
             this.head = newTaskListed;
         } else {
-            this.tail.next = newTaskListed;
+            this.tail.setNext(newTaskListed);
         }
         this.tail = newTaskListed;
         this.sizeList++;
@@ -54,29 +60,29 @@ public class LinkedTaskList extends AbstractTaskList {
      */
     public boolean remove (Task task){
 
-        Node currentTask = this.head;
-        Node previousTask;
+        Node<Task> currentTask = this.head;
+        Node<Task> previousTask;
 
         if (currentTask.taskListed.equals(task)) {
-            this.head = this.head.next;
+            this.head = this.head.getNext();
             this.sizeList--;
             return true;
         } else {
             do {
                 previousTask = currentTask;
-                currentTask = currentTask.next;
+                currentTask = currentTask.getNext();
                 if (currentTask.taskListed.equals(task)) {
                     if (currentTask == this.tail) {
                         this.tail = previousTask;
-                        previousTask.next = null;
+                        previousTask.setNext(null);
                     } else {
-                        previousTask.next = currentTask.next;
-                        currentTask.next = null;
+                        previousTask.setNext(currentTask.getNext());
+                        currentTask.setNext(null);
                     }
                     this.sizeList--;
                     return true;
                 }
-            } while (currentTask.next != null);
+            } while (currentTask.getNext() != null);
             return false;
         }
     }
@@ -93,22 +99,85 @@ public class LinkedTaskList extends AbstractTaskList {
         if ((index < 0) || (index > this.sizeList - 1)) {
             throw new IndexOutOfBoundsException("Index exceeds the permissible limits for the list.");
         } else {
-            Node auxiliary = this.head;
+            Node<Task> auxiliary = this.head;
             for (int indexAux = 0; indexAux < index; indexAux++) {
-                auxiliary = auxiliary.next;
+                auxiliary = auxiliary.getNext();
             }
-            return auxiliary.taskListed;
+            return auxiliary.getTaskListed();
         }
     }
 
-    static class Node{
+    @NotNull
+    @Override
+    public Iterator<Task> iterator() {
+        return new Iterator<Task>(){
+            private Node<Task> currentNode = head;
 
-        Task taskListed;
-        Node next;
+            @Override
+            public boolean hasNext(){
+                return currentNode != null;
+            }
+
+            @Override
+            public Task next(){
+
+                Task listTask = currentNode.getTaskListed();
+                currentNode = currentNode.getNext();
+
+                return listTask;
+            }
+
+            @Override
+            public void remove()
+            {
+                throw new UnsupportedOperationException();
+            }
+        };
+    }
+
+    @Override
+    public void forEach(Consumer<? super Task> action) {
+        super.forEach(action);
+    }
+
+    @Override
+    public Spliterator<Task> spliterator() {
+        return super.spliterator();
+    }
+
+    @Override
+    public String toString(){
+        StringBuilder auxStr = new StringBuilder("Linked List: "+ this.size() +" Tasks \n");
+        for (Task auxTask : this) {
+            auxStr.append(auxTask.toString()).append("\n");
+        }
+        return auxStr.toString();
+    }
+
+    static class Node<Task>{
+
+        private Task taskListed;
+        private Node<Task> next;
 
         Node(Task task){
             this.taskListed = task;
-            next = null;
+            this.next = null;
+        }
+
+        public Task getTaskListed() {
+            return taskListed;
+        }
+
+        public void setTaskListed(Task taskListed) {
+            this.taskListed = taskListed;
+        }
+
+        public Node<Task> getNext() {
+            return next;
+        }
+
+        public void setNext(Node<Task> next) {
+            this.next = next;
         }
     }
 }

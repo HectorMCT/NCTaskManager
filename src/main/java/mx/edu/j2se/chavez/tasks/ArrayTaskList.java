@@ -1,5 +1,10 @@
 package mx.edu.j2se.chavez.tasks;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.util.*;
+import java.util.function.Consumer;
+
 /**
  * ArrayTaskList is a class that permit store objects from the Task class.
  *
@@ -21,7 +26,7 @@ public class ArrayTaskList extends AbstractTaskList {
      * </p>
      * @since 1.0
      */
-    ArrayTaskList(){
+    public ArrayTaskList(){
         this.listOfTasks = new Task[0];
         this.sizeList = 0;
     }
@@ -100,5 +105,51 @@ public class ArrayTaskList extends AbstractTaskList {
             throw new IndexOutOfBoundsException("The index is negative, it is greater than or equal to the length of the specified array");
         }
         return this.listOfTasks[index];
+    }
+
+    @NotNull
+    @Override
+    public Iterator<Task> iterator() {
+        return new Iterator<Task>(){
+
+            private Integer index = 0;
+
+            @Override
+            public boolean hasNext() {
+                return index < sizeList;
+            }
+
+            @Override
+            public Task next() {
+                if(Objects.equals(index, sizeList)) {
+                    throw new NoSuchElementException("Iterator reached last position!");
+                }
+                return listOfTasks[index++];
+            }
+
+            @Override
+            public void remove() {
+                Iterator.super.remove();
+            }
+        };
+    }
+
+    @Override
+    public void forEach(Consumer<? super Task> action) {
+        super.forEach(action);
+    }
+
+    @Override
+    public Spliterator<Task> spliterator() {
+        return super.spliterator();
+    }
+
+    @Override
+    public String toString(){
+        StringBuilder auxStr = new StringBuilder("Array: "+ this.size() +" Tasks \n");
+        for (int index = 0; index < this.sizeList; index++) {
+            auxStr.append(index + 1).append(" - ").append(this.listOfTasks[index].toString()).append("\n");
+        }
+        return auxStr.toString();
     }
 }

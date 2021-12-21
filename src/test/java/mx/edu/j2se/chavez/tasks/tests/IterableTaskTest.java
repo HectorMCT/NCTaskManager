@@ -10,7 +10,7 @@ import org.junit.Test;
 public class IterableTaskTest {
 
     @Test
-    public void testIterableArray(){
+    public void testIterableArray() throws CloneNotSupportedException {
         //Crea una instacia de un ArrayTaskList
         AbstractTaskList tareasSemanales = new ArrayTaskList();
 
@@ -45,7 +45,7 @@ public class IterableTaskTest {
     }
 
     @Test
-    public void testIterableList(){
+    public void testIterableList() throws CloneNotSupportedException {
         //Crea una instacia de un ArrayTaskList
         AbstractTaskList tareasSemanales = new LinkedTaskList();
 

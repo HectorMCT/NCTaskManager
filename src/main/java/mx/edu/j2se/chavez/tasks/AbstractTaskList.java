@@ -2,17 +2,18 @@ package mx.edu.j2se.chavez.tasks;
 
 import java.util.Iterator;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 public abstract class AbstractTaskList implements Cloneable, Iterable<Task> {
 
     /** Size of the current list */
     protected Integer sizeList;
 
-    public abstract void add(Task task);
+    public abstract void add(Task task) throws NullPointerException;
 
-    public abstract boolean remove(Task task);
+    public abstract boolean remove(Task task) throws NullPointerException;
 
-    public abstract Task getTask(int index);
+    public abstract Task getTask(int index) throws IndexOutOfBoundsException;
 
     /**
      * <p> Returns an AbstractTaskList of the specified range of time within this list. </p>
@@ -42,13 +43,8 @@ public abstract class AbstractTaskList implements Cloneable, Iterable<Task> {
             auxiliaryTaskList = new LinkedTaskList();
         }
 
-        for (int index = 0; index < this.sizeList; index++){
-            Task task = getTask(index);
-            if ((task.nextTimeAfter(from) >= from) && (task.nextTimeAfter(from) <= to)) {
-                auxiliaryTaskList.add(task);
-            }
-        }
-
+        Stream<Task> resStream = getStream().filter(task -> (task.nextTimeAfter(from) < to) && (task.nextTimeAfter(from) != -1));
+        resStream.forEach(auxiliaryTaskList::add);
         return auxiliaryTaskList;
     }
 
@@ -60,7 +56,6 @@ public abstract class AbstractTaskList implements Cloneable, Iterable<Task> {
     public int size(){
         return this.sizeList;
     }
-
 
     /**
      * <p>
@@ -101,12 +96,37 @@ public abstract class AbstractTaskList implements Cloneable, Iterable<Task> {
         return true;
     }
 
+    /**
+     * <p>
+     *     Creates and returns a copy of this Object.
+     * </p>
+     * @return A clone of this instance.
+     * @throws CloneNotSupportedException - If this object's class does not implement the Cloneable interface.
+     * @since 1.0
+     */
     @Override
-    public AbstractTaskList clone() {
+    public AbstractTaskList clone() throws CloneNotSupportedException {
+
+        AbstractTaskList auxiliaryTaskList;
+
         try {
-            return (AbstractTaskList) super.clone();
+            auxiliaryTaskList = (AbstractTaskList) super.clone();
+
+            for(Task task: this){
+                auxiliaryTaskList.add(task);
+            }
+            return auxiliaryTaskList;
+
         } catch (CloneNotSupportedException e) {
-            throw new AssertionError();
+            throw new CloneNotSupportedException("Impossible to clone");
         }
+    }
+
+    public Stream<Task> getStream(){
+        Stream.Builder<Task> taskBuilder = Stream.builder();
+        for (Task task: this){
+            taskBuilder.add(task);
+        }
+        return taskBuilder.build();
     }
 }

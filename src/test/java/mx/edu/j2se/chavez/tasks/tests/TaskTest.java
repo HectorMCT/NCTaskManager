@@ -98,6 +98,13 @@ public class TaskTest {
 
         assertEquals(repetitiveTask, repetitiveTask2);
 
+        Task reptitiveClone = null;
+        try {
+            reptitiveClone = repetitiveTask.clone();
+        } catch (CloneNotSupportedException exception) {
+            System.out.println("Impossible to clone");
+        }
+        assertEquals(repetitiveTask, reptitiveClone);
     }
 
     @Test

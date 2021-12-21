@@ -249,6 +249,13 @@ public class Task implements Cloneable {
 
     }
 
+    /**
+     * <p>
+     *     Returns a hash code value for the object.
+     * </p>
+     * @return A hash code value for this object.
+     * @since 1.0
+     */
     @Override
     public int hashCode(){
         return 1000003 * this.title.hashCode() *
@@ -259,17 +266,40 @@ public class Task implements Cloneable {
                 this.repetitive.hashCode();
     }
 
+    /**
+     * <p>
+     *     Returns a string representation of the Task.
+     * </p>
+     * @return A string representation of the Task.
+     * @since 1.0
+     */
     @Override
     public String toString(){
         return this.title + ", Starts: " + this.start.toString() + ", Ends: " + this.end.toString() + ", Each: " + this.interval.toString() + ", Active: " + this.state.toString() + ", Repetitive: " + this.repetitive.toString() ;
     }
 
+    /**
+     * <p>
+     *     Creates and returns a copy of this Task.
+     * </p>
+     * @return A clone of this instance.
+     * @throws CloneNotSupportedException - If this object's class does not implement the Cloneable interface.
+     * @since 1.0
+     */
     @Override
-    public Task clone() {
+    public Task clone() throws CloneNotSupportedException {
+        Task clone;
         try {
-            return (Task) super.clone();
-        } catch (CloneNotSupportedException e) {
-            throw new AssertionError();
+            clone = (Task) super.clone();
+            clone.repetitive = this.repetitive;
+            clone.state = this.state;
+            clone.end = this.end;
+            clone.interval = this.interval;
+            clone.title = this.title;
+            clone.start = this.start;
+            return clone;
+        } catch (CloneNotSupportedException exception) {
+            throw new CloneNotSupportedException("Can not be possible make a copy.");
         }
     }
 }

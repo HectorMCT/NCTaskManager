@@ -258,7 +258,7 @@ public class Task implements Cloneable {
      */
     @Override
     public int hashCode(){
-        return 1000003 * this.title.hashCode() *
+        return 1_000_003 * this.title.hashCode() *
                 this.start.hashCode() *
                 this.end.hashCode() *
                 this.interval.hashCode() *

@@ -34,6 +34,12 @@ public class IterableTaskTest {
         AbstractTaskList auxArray = tareasSemanales.clone();
         Assert.assertEquals(tareasSemanales, auxArray);
 
+        System.out.println(System.identityHashCode(tareasSemanales));
+        System.out.println(System.identityHashCode(auxArray));
+
+        System.out.println(tareasSemanales.hashCode());
+        System.out.println(auxArray.hashCode());
+
         for (Task auxTask: tareasSemanales) {
             System.out.println(auxTask);
         }
@@ -68,6 +74,13 @@ public class IterableTaskTest {
         //Corroboramos el buen funcionamiento del metodo clone
         AbstractTaskList auxArray = tareasSemanales.clone();
         Assert.assertEquals(tareasSemanales, auxArray);
+
+
+        System.out.println(System.identityHashCode(tareasSemanales));
+        System.out.println(System.identityHashCode(auxArray));
+
+        System.out.println(tareasSemanales.hashCode());
+        System.out.println(auxArray.hashCode());
 
         for (Task auxTask: tareasSemanales) {
             System.out.println(auxTask);

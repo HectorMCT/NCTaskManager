@@ -23,7 +23,7 @@ public abstract class AbstractTaskList implements Cloneable, Iterable<Task> {
      * @throws IllegalArgumentException - If the from-time or to-time are negative, or from-time are greater or equals to To-time
      * @since 1.0
      */
-    public AbstractTaskList incoming(int from, int to)throws IllegalArgumentException {
+    public final AbstractTaskList incoming(int from, int to)throws IllegalArgumentException {
 
         if(from < 0){
             throw new IllegalArgumentException("From-time cannot be negative");
@@ -43,8 +43,8 @@ public abstract class AbstractTaskList implements Cloneable, Iterable<Task> {
             auxiliaryTaskList = new LinkedTaskList();
         }
 
-        Stream<Task> resStream = getStream().filter(task -> (task.nextTimeAfter(from) < to) && (task.nextTimeAfter(from) != -1));
-        resStream.forEach(auxiliaryTaskList::add);
+        getStream().filter(task -> (task.nextTimeAfter(from) < to) && (task.nextTimeAfter(from) != -1)).forEach(auxiliaryTaskList::add);
+
         return auxiliaryTaskList;
     }
 
@@ -87,12 +87,11 @@ public abstract class AbstractTaskList implements Cloneable, Iterable<Task> {
 
         Iterator<Task> auxiliaryIterator = ((AbstractTaskList) object).iterator();
 
-        for(Task taskIterator : this) {
+        for (Task taskIterator : this) {
             if(!taskIterator.equals(auxiliaryIterator.next())) {
                 return false;
             }
         }
-
         return true;
     }
 
@@ -111,10 +110,9 @@ public abstract class AbstractTaskList implements Cloneable, Iterable<Task> {
 
         try {
             auxiliaryTaskList = (AbstractTaskList) super.clone();
-
-            for(Task task: this){
+            /*for(Task task: this){
                 auxiliaryTaskList.add(task);
-            }
+            }*/
             return auxiliaryTaskList;
 
         } catch (CloneNotSupportedException e) {
@@ -122,11 +120,16 @@ public abstract class AbstractTaskList implements Cloneable, Iterable<Task> {
         }
     }
 
+    @Override
+    public int hashCode(){
+        return 1_000_003 * sizeList.hashCode() * getStream().mapToInt(Task::hashCode).sum();
+    }
+
     public Stream<Task> getStream(){
         Stream.Builder<Task> taskBuilder = Stream.builder();
-        for (Task task: this){
+        /*for (Task task: this){
             taskBuilder.add(task);
-        }
-        return taskBuilder.build();
+        }*/
+        return taskBuilder.add(this.iterator().next()).build();
     }
 }

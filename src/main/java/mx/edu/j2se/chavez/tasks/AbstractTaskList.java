@@ -17,15 +17,8 @@ public abstract class AbstractTaskList implements Cloneable, Iterable<Task> {
 
     public abstract Task getTask(int index) throws IndexOutOfBoundsException;
 
-    /**
-     * <p> Returns an AbstractTaskList of the specified range of time within this list. </p>
-     * @param from - low startTime (inclusive) of the subList
-     * @param to - high startTime (exclusive) of the subList
-     * @return An AbstractTaskList of the specified range of time within this list.
-     * @throws IllegalArgumentException - If the from-time or to-time are negative, or from-time are greater or equals to To-time
-     * @since 1.0
-     */
-    public final AbstractTaskList incoming(LocalDateTime from, LocalDateTime to) throws IllegalArgumentException {
+
+    /*public final AbstractTaskList incoming(LocalDateTime from, LocalDateTime to) throws IllegalArgumentException {
 
         if(from == null){
             throw new IllegalArgumentException("From-time cannot be negative");
@@ -55,7 +48,7 @@ public abstract class AbstractTaskList implements Cloneable, Iterable<Task> {
         }).forEach(auxiliaryTaskList::add);
         System.out.println(auxiliaryTaskList);
         return auxiliaryTaskList;
-    }
+    }*/
 
     /**
      * <p> Returns the number of Tasklist </p>

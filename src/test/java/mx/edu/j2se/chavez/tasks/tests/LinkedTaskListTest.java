@@ -2,11 +2,13 @@ package mx.edu.j2se.chavez.tasks.tests;
 
 import mx.edu.j2se.chavez.tasks.LinkedTaskList;
 import mx.edu.j2se.chavez.tasks.Task;
+import mx.edu.j2se.chavez.tasks.Tasks;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDateTime;
+import java.util.Iterator;
 
 public class LinkedTaskListTest{
 
@@ -121,8 +123,12 @@ public class LinkedTaskListTest{
 
         //tareasSemanales.showTasks();
 
-        LinkedTaskList subTareas = (LinkedTaskList) tareasSemanales.incoming(time.plusHours(10),time.plusHours(200));
+        Iterator<Task> subTareas = Tasks.incoming(tareasSemanales.iterator(), time.plusHours(10),time.plusHours(200));
 
+        System.out.println("--------");
+        while (subTareas.hasNext()) {
+            System.out.println(subTareas.next());
+        }
         //subTareas.showTasks();
     }
 }

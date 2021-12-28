@@ -69,16 +69,14 @@ public class Tasks {
             Task task = it.next();
             LocalDateTime nextTime = task.nextTimeAfter(start);
             while ( nextTime != null && (nextTime.isBefore(end) || nextTime.isEqual(end))) {
-                Set<Task> timeTasks;
                 if (!calendar.containsKey(nextTime)) {
-                    timeTasks = new HashSet<>(Collections.singletonList(task));
-
+                    Set<Task> timeTasks = new HashSet<>(Collections.singletonList(task));
+                    calendar.put(nextTime, timeTasks);
                 } else {
-                    timeTasks = calendar.get(nextTime);
-                    timeTasks.add(task);
-                    //calendar.get(nextTime).add(task);
+                    /*timeTasks = calendar.get(nextTime);
+                    timeTasks.add(task);*/
+                    calendar.get(nextTime).add(task);
                 }
-                calendar.put(nextTime, timeTasks);
                 nextTime = task.nextTimeAfter(nextTime);
             }
         }

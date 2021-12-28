@@ -2,42 +2,45 @@ package mx.edu.j2se.chavez.tasks;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Stream;
 
 public class Tasks {
-    public static Iterable<Task> incoming(Iterable<Task> tasks, LocalDateTime start, LocalDateTime end) {
+    public static Iterator<Task> incoming(Iterator<Task> tasks, LocalDateTime start, LocalDateTime end) {
 
-        AbstractTaskList subTasks = new ArrayTaskList();
+        Stream.Builder<Task> subTasks = Stream.builder();
 
-        for (Task task : tasks) {
+
+        while (tasks.hasNext()) {
+            Task task = tasks.next();
             if (task.isActive()) {
                 if (task.nextTimeAfter(start).compareTo(end) <= 0) {
                     subTasks.add(task);
                 }
             }
         }
-        return subTasks;
-
+        return subTasks.build().iterator();
     }
 
-    public static SortedMap<LocalDateTime, Set<Task>> calendar(Iterable<Task> tasks, LocalDateTime start, LocalDateTime end) {
+    public static SortedMap<LocalDateTime, Set<Task>> calendar(Iterator<Task> tasks, LocalDateTime start, LocalDateTime end) {
 
         SortedMap<LocalDateTime, Set<Task>> calendar = new TreeMap<>();
 
-        for (Task task : incoming(tasks, start, end)) {
+        Iterator<Task> it = incoming(tasks, start, end);
+
+        while (it.hasNext()) {
+            Task task = it.next();
             LocalDateTime nextTime = task.nextTimeAfter(start);
             while ( nextTime != null && (nextTime.isBefore(end) || nextTime.isEqual(end))) {
+                Set<Task> timeTasks;
                 if (!calendar.containsKey(nextTime)) {
-                    Set<Task> timeTasks = new HashSet<>(Collections.singletonList(task));
-                    calendar.put(nextTime, timeTasks);
+                    timeTasks = new HashSet<>(Collections.singletonList(task));
 
                 } else {
-
-                    Set<Task> timeTasks = calendar.get(nextTime);
+                    timeTasks = calendar.get(nextTime);
                     timeTasks.add(task);
-                    calendar.put(nextTime, timeTasks);
-
                     //calendar.get(nextTime).add(task);
                 }
+                calendar.put(nextTime, timeTasks);
                 nextTime = task.nextTimeAfter(nextTime);
             }
         }

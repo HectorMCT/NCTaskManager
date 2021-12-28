@@ -1,5 +1,7 @@
 package mx.edu.j2se.chavez.tasks;
 
+import java.lang.reflect.InvocationTargetException;
+import java.time.LocalDateTime;
 import java.util.Iterator;
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -23,18 +25,19 @@ public abstract class AbstractTaskList implements Cloneable, Iterable<Task> {
      * @throws IllegalArgumentException - If the from-time or to-time are negative, or from-time are greater or equals to To-time
      * @since 1.0
      */
-    public final AbstractTaskList incoming(int from, int to)throws IllegalArgumentException {
+    public final AbstractTaskList incoming(LocalDateTime from, LocalDateTime to) throws IllegalArgumentException {
 
-        if(from < 0){
+        if(from == null){
             throw new IllegalArgumentException("From-time cannot be negative");
-        } else if (to < 0) {
+        } else if (to == null) {
             throw new IllegalArgumentException("To-time cannot be negative");
-        } else if (from > to) {
+        } else if (from.isAfter(to)) {
             throw new IllegalArgumentException("From-time cannot be greater than To-time");
         } else if (from == to) {
             throw new IllegalArgumentException("To-time cannot be equals than From-time. It has to be greater");
         }
 
+        //AbstractTaskList auxiliaryTaskList = getClass().getDeclaredConstructor().newInstance();;
         AbstractTaskList auxiliaryTaskList;
 
         if(this instanceof ArrayTaskList){
@@ -43,8 +46,14 @@ public abstract class AbstractTaskList implements Cloneable, Iterable<Task> {
             auxiliaryTaskList = new LinkedTaskList();
         }
 
-        getStream().filter(task -> (task.nextTimeAfter(from) < to) && (task.nextTimeAfter(from) != -1)).forEach(auxiliaryTaskList::add);
-
+        getStream().filter(Objects::nonNull).filter(task -> {
+                        if(task.nextTimeAfter(from)!=null){
+                            return Objects.requireNonNull(task.nextTimeAfter(from)).isBefore(to) || Objects.requireNonNull(task.nextTimeAfter(from)).isEqual(to);
+                        } else {
+                            return false;
+                        }
+        }).forEach(auxiliaryTaskList::add);
+        System.out.println(auxiliaryTaskList);
         return auxiliaryTaskList;
     }
 
@@ -127,9 +136,9 @@ public abstract class AbstractTaskList implements Cloneable, Iterable<Task> {
 
     public Stream<Task> getStream(){
         Stream.Builder<Task> taskBuilder = Stream.builder();
-        /*for (Task task: this){
+        for (Task task: this){
             taskBuilder.add(task);
-        }*/
-        return taskBuilder.add(this.iterator().next()).build();
+        }
+        return taskBuilder.build();
     }
 }

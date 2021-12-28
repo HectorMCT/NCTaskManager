@@ -1,5 +1,6 @@
 package mx.edu.j2se.chavez.tasks;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 
@@ -8,9 +9,9 @@ public class Task implements Cloneable {
     /** The title of task */
     private String title;
     /** The time when the task it is start. */
-    private Integer start;
+    private LocalDateTime start;
     /** The time when the task it is ended. */
-    private Integer end;
+    private LocalDateTime end;
     /** The interval time when the task it is going to be executed. */
     private Integer interval;
     /** The state of the task that indicate if it is active or not
@@ -31,9 +32,9 @@ public class Task implements Cloneable {
      * @throws IllegalArgumentException - If the start time it is negative or if the title is an empty String or null value.
      * @since 1.0
      */
-    public Task(String title, int time) throws IllegalArgumentException {
-        if(time < 0){
-            throw new IllegalArgumentException("Start time cannot be negative");
+    public Task(String title, LocalDateTime time) throws IllegalArgumentException {
+        if(time == null){
+            throw new IllegalArgumentException("You need a Start Time.");
         }
         if(title == null || title.isEmpty()){
             throw new IllegalArgumentException("Task cannot take in an empty String or null value for the \"title\" constructor");
@@ -58,15 +59,15 @@ public class Task implements Cloneable {
      * or if start time is greater or equals to end time. Also, if the title is an empty String or null value.
      * @since 1.0
      */
-    public Task(String title, int start, int end, int interval) throws IllegalArgumentException {
+    public Task(String title, LocalDateTime start, LocalDateTime end, Integer interval) throws IllegalArgumentException {
         this(title, start);
-        if (interval < 0) {
+        if (end == null) {
+            throw new IllegalArgumentException("You need a End Time.");
+        } else if (interval < 0L) {
             throw new IllegalArgumentException("Interval time cannot be negative");
-        } else if (end < 0) {
-            throw new IllegalArgumentException("End time cannot be negative");
         } else if (end == start) {
             throw new IllegalArgumentException("End time cannot be equals than Start time. It has to be greater");
-        } else if (end < start) {
+        } else if (start.isAfter(end)) {
             throw new IllegalArgumentException("End time cannot be less than Start time. It has to be greater");
         }
         this.end = end;
@@ -96,15 +97,15 @@ public class Task implements Cloneable {
         this.title = title;
     }
 
-    public int getTime() {
+    public LocalDateTime getTime() {
         return this.start;
     }
 
-    public int getStartTime(){
+    public LocalDateTime getStartTime(){
         return this.start;
     }
 
-    public int getEndTime() {
+    public LocalDateTime getEndTime() {
         return this.end;
     }
 
@@ -118,7 +119,7 @@ public class Task implements Cloneable {
      * @return The interval of time the task it is been executed.
      * @since 1.0
      */
-    public int getRepeatInterval() {
+    public Integer getRepeatInterval() {
         return (this.repetitive) ? this.interval : 0;
     }
 
@@ -133,9 +134,11 @@ public class Task implements Cloneable {
      * @throws IllegalArgumentException - If time it is negative.
      * @since 1.0
      */
-    public void setTime(int time) throws IllegalArgumentException {
-        if(time < 0){
-            throw new IllegalArgumentException("Time cannot be negative");
+    public void setTime(LocalDateTime time) throws IllegalArgumentException {
+        if (start == null) {
+            throw new IllegalArgumentException("You need a Start Time.");
+        } else if (time.isBefore(LocalDateTime.now())){
+            throw new IllegalArgumentException("Your Time cannot be negative.");
         }
         this.repetitive = false;
         this.start = time;
@@ -154,16 +157,16 @@ public class Task implements Cloneable {
      * @throws IllegalArgumentException - If start time, end time or interval of time are negative, or if start time is greater or equals to end time.
      * @since 1.0
      */
-    public void setTime(int start, int end, int interval) throws IllegalArgumentException {
-        if(start < 0){
-            throw new IllegalArgumentException("Start time cannot be negative");
-        } else if (end < 0) {
-            throw new IllegalArgumentException("End time cannot be negative");
+    public void setTime(LocalDateTime start, LocalDateTime end, Integer interval) throws IllegalArgumentException {
+        if(start == null){
+            throw new IllegalArgumentException("You need a Start Time.");
+        } else if (end == null) {
+            throw new IllegalArgumentException("You need a End Time.");
         } else if (interval < 0) {
             throw new IllegalArgumentException("Interval time cannot be negative");
         } else if (end == start) {
             throw new IllegalArgumentException("End time cannot be equals than Start time. It has to be greater");
-        } else if (end < start) {
+        } else if (start.isAfter(end)) {
             throw new IllegalArgumentException("End time cannot be less than Start time. It has to be greater");
         }
         this.repetitive = true;
@@ -196,22 +199,34 @@ public class Task implements Cloneable {
      * @since 1.0
      */
 
-    public int nextTimeAfter (int current) throws IllegalArgumentException {
-        if(current < 0){
-            throw new IllegalArgumentException("Current time cannot be negative");
+    public LocalDateTime nextTimeAfter (LocalDateTime current) throws IllegalArgumentException {
+        if(current == null){
+            throw new IllegalArgumentException("You need to introduce the Current time");
         }
-        if ((current >= this.end) || (!this.isActive())) {
-            return -1;
-        } else if (current < this.start) {
-            return this.start;
+        if ((this.isRepeated())) {
+            if (this.isActive()) {
+                LocalDateTime nextTime = this.start;
+                if (current.isBefore(this.start)) {
+                    return this.start;
+                } else if (current.isAfter(this.end)) {
+                    return null;
+                } else {
+                    while (nextTime.isBefore(end) || nextTime.isEqual(end)) {
+                        if (nextTime.isAfter(current)) {
+                            return nextTime;
+                        }
+                        nextTime =  nextTime.plusHours(this.interval);
+                    }
+                }
+            }
         } else {
-            for (int index = this.start; index <= this.end; index += this.interval){
-                if (index > current) {
-                    return index;
+            if(this.isActive()){
+                if (current.isBefore(this.start)) {
+                    return this.start;
                 }
             }
         }
-        return -1;
+        return null;
     }
 
     /**

@@ -5,27 +5,37 @@ import mx.edu.j2se.chavez.tasks.Task;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.lang.reflect.InvocationTargetException;
+import java.time.LocalDateTime;
+
 public class LinkedTaskListTest{
 
     @Test
     public void testTaskList() {
+
+
+        LocalDateTime time = LocalDateTime.now();
+
         //Crea una instacia de un ArrayTaskList
         LinkedTaskList tareasSemanales = new LinkedTaskList();
 
         //Creamos varias instacias de Task las cuales se crearan con un startTime con respecto a
         //la variable iterable en el for en incrementos de 25. Hasta un tiempo maximo de 300
-        for (int startTime = 0; startTime <= 300; startTime += 25) {
-            Task auxiliatyTask = new Task("Task " + (startTime + 25) / 25, startTime, startTime + 96, 24);
+        int auxiliary = 1;
+        for (LocalDateTime startTime = time; startTime.isBefore(time.plusMonths(1)); startTime = startTime.plusDays(1)) {
+            Task auxiliatyTask = new Task("Task " + auxiliary, startTime, startTime.plusDays(5), 24);
             //Si el startTime es par activamos la tarea.
-            if ((startTime % 2) == 0) {
+            System.out.println(startTime);
+            if ((auxiliary % 2) == 0) {
                 auxiliatyTask.setActive(true);
             }
             //Agregamos la tarea al arreglo de tareas
             tareasSemanales.add(auxiliatyTask);
+            auxiliary++;
         }
 
         //Se espera que la lista de tareas contenga 13 de ella.
-        Assert.assertEquals(13, tareasSemanales.size());
+        Assert.assertEquals(31, tareasSemanales.size());
         //tareasSemanales.showTasks();
 
         Task nuevaTarea = tareasSemanales.getTask(0);
@@ -61,7 +71,7 @@ public class LinkedTaskListTest{
 
         //Corroboramos que el tamaño de la tarea diminuyo en 1.
         //Se espera que la lista de tareas contenga 12 de ella.
-        Assert.assertEquals(10, tareasSemanales.size());
+        Assert.assertEquals(28, tareasSemanales.size());
 
         System.out.println("--------");
         //tareasSemanales.showTasks();
@@ -74,7 +84,7 @@ public class LinkedTaskListTest{
         nuevaTarea1 = tareasSemanales.getTask(9);
         System.out.println(nuevaTarea1.getTitle());
 
-        nuevaTarea1 = new Task("Task " + 12, 100, 100 + 96, 24);
+        nuevaTarea1 = new Task("Task " + 12, LocalDateTime.now().plusDays(7), LocalDateTime.now().plusDays(15), 24);
 
         //Eliminamos la nuevaTarea del arreglo.
         Assert.assertFalse(tareasSemanales.remove(nuevaTarea1));
@@ -85,25 +95,33 @@ public class LinkedTaskListTest{
 
 
     @Test
-    public void testTaskSubList(){
+    public void testTaskSubList() {
+
+
+        LocalDateTime time = LocalDateTime.now();
+
         //Crea una instacia de un ArrayTaskList
         LinkedTaskList tareasSemanales = new LinkedTaskList();
 
         //Creamos varias instacias de Task las cuales se crearan con un startTime con respecto a
         //la variable iterable en el for en incrementos de 25. Hasta un tiempo maximo de 300
-        for(int startTime = 0; startTime <= 300; startTime += 25 ){
-            Task auxiliatyTask = new Task("Task " + (startTime + 25)/25 ,startTime, startTime + 96, 24);
+
+        int auxiliary = 1;
+        for (LocalDateTime startTime = time; startTime.isBefore(time.plusMonths(1)); startTime = startTime.plusDays(1)) {
+            Task auxiliatyTask = new Task("Task " + auxiliary, startTime, startTime.plusDays(5), 24);
             //Si el startTime es par activamos la tarea.
-            if((startTime % 2) == 0){
+            System.out.println(startTime);
+            if((auxiliary % 2) == 0){
                 auxiliatyTask.setActive(true);
             }
             //Agregamos la tarea al arreglo de tareas
             tareasSemanales.add(auxiliatyTask);
+            auxiliary++;
         }
 
         //tareasSemanales.showTasks();
 
-        LinkedTaskList subTareas = (LinkedTaskList) tareasSemanales.incoming(10,200);
+        LinkedTaskList subTareas = (LinkedTaskList) tareasSemanales.incoming(time.plusHours(10),time.plusHours(200));
 
         //subTareas.showTasks();
     }

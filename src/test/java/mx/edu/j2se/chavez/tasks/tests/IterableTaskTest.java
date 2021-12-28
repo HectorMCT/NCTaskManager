@@ -7,23 +7,31 @@ import mx.edu.j2se.chavez.tasks.Task;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.time.LocalDateTime;
+
 public class IterableTaskTest {
 
     @Test
     public void testIterableArray() throws CloneNotSupportedException {
+
+
+        LocalDateTime time = LocalDateTime.now();
         //Crea una instacia de un ArrayTaskList
         AbstractTaskList tareasSemanales = new ArrayTaskList();
 
         //Creamos varias instacias de Task las cuales se crearan con un startTime con respecto a
         //la variable iterable en el for en incrementos de 25. Hasta un tiempo maximo de 300
-        for(int startTime = 0; startTime <= 300; startTime += 25 ){
-            Task auxiliatyTask = new Task("Task " + (startTime + 25)/25 ,startTime, startTime + 96, 24);
+        int auxiliary = 1;
+        for (LocalDateTime startTime = time; startTime.isBefore(time.plusMonths(1)); startTime = startTime.plusDays(1)) {
+            Task auxiliatyTask = new Task("Task " + auxiliary, startTime, startTime.plusDays(5), 24);
             //Si el startTime es par activamos la tarea.
-            if((startTime % 2) == 0){
+            System.out.println(startTime);
+            if((auxiliary % 2) == 0){
                 auxiliatyTask.setActive(true);
             }
             //Agregamos la tarea al arreglo de tareas
-            tareasSemanales.add(auxiliatyTask);
+
+            auxiliary++;
         }
 
         //Metodo toString
@@ -46,25 +54,32 @@ public class IterableTaskTest {
 
         //Equals
         System.out.println("Equals Array");
-        Assert.assertTrue(tareasSemanales.equals(auxArray));
+        Assert.assertEquals(tareasSemanales, auxArray);
         System.out.println("______________________________________________________");
     }
 
     @Test
     public void testIterableList() throws CloneNotSupportedException {
+
+
+        LocalDateTime time = LocalDateTime.now();
+
         //Crea una instacia de un ArrayTaskList
         AbstractTaskList tareasSemanales = new LinkedTaskList();
 
         //Creamos varias instacias de Task las cuales se crearan con un startTime con respecto a
         //la variable iterable en el for en incrementos de 25. Hasta un tiempo maximo de 300
-        for(int startTime = 0; startTime <= 300; startTime += 25 ){
-            Task auxiliatyTask = new Task("Task " + (startTime + 25)/25 ,startTime, startTime + 96, 24);
+        int auxiliary = 1;
+        for (LocalDateTime startTime = time; startTime.isBefore(time.plusMonths(1)); startTime = startTime.plusDays(1)) {
+            Task auxiliatyTask = new Task("Task " + auxiliary, startTime, startTime.plusDays(5), 24);
             //Si el startTime es par activamos la tarea.
-            if((startTime % 2) == 0){
+            System.out.println(startTime);
+            if((auxiliary % 2) == 0){
                 auxiliatyTask.setActive(true);
             }
             //Agregamos la tarea al arreglo de tareas
             tareasSemanales.add(auxiliatyTask);
+            auxiliary++;
         }
 
         //Metodo toString
@@ -88,7 +103,7 @@ public class IterableTaskTest {
 
         //Equals
         System.out.println("Equals List");
-        Assert.assertTrue(tareasSemanales.equals(auxArray));
+        Assert.assertEquals(tareasSemanales, auxArray);
         System.out.println("______________________________________________________");
     }
 }

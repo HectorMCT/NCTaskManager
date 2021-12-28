@@ -29,14 +29,16 @@ public class Tasks {
         Stream.Builder<Task> subTasks = Stream.builder();
 
         while (tasks.hasNext()) {
-            Task task = tasks.next();
-            if (task.isActive()) {
-                if (task.nextTimeAfter(start).compareTo(end) <= 0) {
-                    subTasks.add(task);
-                }
-            }
+            subTasks.add(tasks.next());
         }
-        return subTasks.build().iterator();
+
+        return subTasks.build().filter(Objects::nonNull).filter(task -> {
+            if(task.nextTimeAfter(start)!=null){
+                return Objects.requireNonNull(task.nextTimeAfter(start)).isBefore(end) || Objects.requireNonNull(task.nextTimeAfter(start)).isEqual(end);
+            } else {
+                return false;
+            }
+        }).iterator();
     }
 
     /**

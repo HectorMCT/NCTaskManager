@@ -1,9 +1,13 @@
-package mx.edu.j2se.chavez.tasks;
+package mx.edu.j2se.chavez.tasks.tests;
 
 import junit.framework.TestCase;
+import mx.edu.j2se.chavez.tasks.LinkedTaskList;
+import mx.edu.j2se.chavez.tasks.Task;
+import mx.edu.j2se.chavez.tasks.Tasks;
 import org.junit.Test;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.SortedMap;
@@ -54,7 +58,7 @@ public class TasksTest {
         for (LocalDateTime startTime = time; startTime.isBefore(time.plusMonths(4)); startTime = startTime.plusDays(7)) {
             Task auxiliatyTask = new Task("Running " + auxiliary, startTime, startTime.plusDays(5), 24);
             //Si el startTime es par activamos la tarea.
-            if((auxiliary % 2) == 0){
+            if ((auxiliary % 2) == 0) {
                 auxiliatyTask.setActive(true);
             }
             //Agregamos la tarea al arreglo de tareas
@@ -66,7 +70,7 @@ public class TasksTest {
         for (LocalDateTime startTime = time; startTime.isBefore(time.plusMonths(4)); startTime = startTime.plusDays(7)) {
             Task auxiliatyTask = new Task("Medication " + auxiliary, startTime, startTime.plusDays(5), 24);
             //Si el startTime es par activamos la tarea.
-            if((auxiliary % 2) == 0){
+            if ((auxiliary % 2) == 0) {
                 auxiliatyTask.setActive(true);
             }
             //Agregamos la tarea al arreglo de tareas
@@ -84,13 +88,14 @@ public class TasksTest {
             auxiliary++;
         }
 
-        SortedMap<LocalDateTime, Set<Task>> calendar = Tasks.calendar(tareasSemanales.iterator(), time.plusDays(25),time.plusDays(85));
+        SortedMap<LocalDateTime, Set<Task>> calendar = Tasks.calendar(tareasSemanales.iterator(), time.plusDays(25), time.plusDays(85));
 
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
         calendar.forEach((localDateTime, tasks) -> {
             System.out.println("------------------------------------------------------------------------------");
             for (Task task : tasks) {
-                System.out.println(localDateTime + " - " + task);
+                System.out.println(localDateTime.format(formatter) + " - " + task);
             }
         });
 

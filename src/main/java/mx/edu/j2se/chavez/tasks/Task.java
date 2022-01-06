@@ -32,7 +32,7 @@ public class Task implements Cloneable {
      * @throws IllegalArgumentException - If the start time it is negative or if the title is an empty String or null value.
      * @since 1.0
      */
-    public Task(String title, LocalDateTime time) throws IllegalArgumentException {
+    public Task(final String title, final LocalDateTime time) throws IllegalArgumentException {
         if(time == null){
             throw new IllegalArgumentException("You need a Start Time.");
         }
@@ -59,7 +59,7 @@ public class Task implements Cloneable {
      * or if start time is greater or equals to end time. Also, if the title is an empty String or null value.
      * @since 1.0
      */
-    public Task(String title, LocalDateTime start, LocalDateTime end, Integer interval) throws IllegalArgumentException {
+    public Task(final String title, final LocalDateTime start, final LocalDateTime end, final Integer interval) throws IllegalArgumentException {
         this(title, start);
         if (end == null) {
             throw new IllegalArgumentException("You need a End Time.");
@@ -90,7 +90,7 @@ public class Task implements Cloneable {
      * @throws IllegalArgumentException - If the title is an empty String or null value
      * @since 1.0
      */
-    public void setTitle(String title) throws IllegalArgumentException {
+    public void setTitle(final String title) throws IllegalArgumentException {
         if(title == null || title.isEmpty()){
             throw new IllegalArgumentException("Task cannot take in an empty String or null value for the \"title\"");
         }
@@ -134,7 +134,7 @@ public class Task implements Cloneable {
      * @throws IllegalArgumentException - If time it is negative.
      * @since 1.0
      */
-    public void setTime(LocalDateTime time) throws IllegalArgumentException {
+    public void setTime(final LocalDateTime time) throws IllegalArgumentException {
         if (start == null) {
             throw new IllegalArgumentException("You need a Start Time.");
         } else if (time.isBefore(LocalDateTime.now())){
@@ -157,7 +157,7 @@ public class Task implements Cloneable {
      * @throws IllegalArgumentException - If start time, end time or interval of time are negative, or if start time is greater or equals to end time.
      * @since 1.0
      */
-    public void setTime(LocalDateTime start, LocalDateTime end, Integer interval) throws IllegalArgumentException {
+    public void setTime(final LocalDateTime start, final LocalDateTime end, final Integer interval) throws IllegalArgumentException {
         if(start == null){
             throw new IllegalArgumentException("You need a Start Time.");
         } else if (end == null) {
@@ -175,7 +175,7 @@ public class Task implements Cloneable {
         this.interval = interval;
     }
 
-    public void setActive (boolean active) {
+    public void setActive (final boolean active) {
         this.state = active;
     }
 

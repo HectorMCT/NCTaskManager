@@ -1,5 +1,6 @@
 package mx.edu.j2se.chavez.tasks;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
 

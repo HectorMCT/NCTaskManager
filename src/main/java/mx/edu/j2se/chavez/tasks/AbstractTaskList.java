@@ -1,20 +1,52 @@
 package mx.edu.j2se.chavez.tasks;
 
-import java.lang.reflect.InvocationTargetException;
-import java.time.LocalDateTime;
 import java.util.Iterator;
 import java.util.Objects;
 import java.util.stream.Stream;
-
+/**
+ * This class provides a skeletal implementation of a list,
+ * to minimize the effort required to implement a list of task.
+ *
+ * To implement a lis, the programmer needs to use the LinkedTaskList class or
+ * the ArrayTaskList, according to your need.
+ *
+ * @author      Hector Chavez
+ * @version     %I%, %G%
+ * @since       1.0
+ */
 public abstract class AbstractTaskList implements Cloneable, Iterable<Task> {
 
     /** Size of the current list */
     protected Integer sizeList;
 
+    /**
+     * <p>
+     *     Add a new Task object to the list.
+     * </p>
+     * @param task - A Task object that will be stored in the current list
+     * @throws NullPointerException - If the specified Task is null
+     * @since 1.0
+     */
     public abstract void add(Task task) throws NullPointerException;
 
+    /**
+     * <p>
+     *     Removes the first occurrence of the specified element from this lsi, if it is present.
+     * </p>
+     * @param task - A Task object to be removed from this array, if present
+     * @return true if this list contained the specified element; false otherwise.
+     * @throws NullPointerException - If the specified Task is null
+     * @since 1.0
+     */
     public abstract boolean remove(Task task) throws NullPointerException;
 
+    /**
+     * <p> Returns the Task at the specified position in this list. </p>
+     * @param index - index of the element to return.
+     * @return The Task at the specified position in this list.
+     * @since 1.0
+     * @throws IndexOutOfBoundsException - If the specified index argument is negative, or if it is greater than or equal to the length of the specified list
+     */
     public abstract Task getTask(int index) throws IndexOutOfBoundsException;
 
 
@@ -122,12 +154,26 @@ public abstract class AbstractTaskList implements Cloneable, Iterable<Task> {
         }
     }
 
+    /**
+     *<p>
+     *     Returns the hash code value for this list.
+     *     The hash code of a list is defined to be the sum of the hash codes of each Task plus the hash code of the sizeList, multiply by the prime number 1000003.
+     * <p/>
+     * @return the hash code value for this list
+     * @since 1.0
+     */
     @Override
     public int hashCode(){
-        return 1_000_003 * sizeList.hashCode() * getStream().mapToInt(Task::hashCode).sum();
+        return 1_000_003 * (sizeList.hashCode() + getStream().mapToInt(Task::hashCode).sum());
     }
 
-    public Stream<Task> getStream(){
+    /**
+     * <p>
+     *     Allows working with collections as with Stream
+     * </p>
+     * @return a Stream of tasks
+     */
+    public final Stream<Task> getStream(){
         Stream.Builder<Task> taskBuilder = Stream.builder();
         for (Task task: this){
             taskBuilder.add(task);

@@ -3,7 +3,6 @@ package mx.edu.j2se.chavez.tasks;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
-import java.util.function.Consumer;
 
 /**
  * ArrayTaskList is a class that permit store objects from the Task class.
@@ -107,18 +106,40 @@ public class ArrayTaskList extends AbstractTaskList {
         return this.listOfTasks[index];
     }
 
+    /**
+     * <p>
+     *     Allows iterate over the array
+     * </p>
+     * @return an iterator object that can be used to iterate over the array.
+     * @throws NoSuchElementException whether the iterator has no more items to iterate over
+     */
     @NotNull
     @Override
-    public Iterator<Task> iterator() {
+    public Iterator<Task> iterator() throws NoSuchElementException {
         return new Iterator<Task>(){
 
+            /**
+             * <p>
+             *     Initialize at the beginning of the array for iteration.
+             * </p>
+             */
             private Integer index = 0;
 
+            /**
+             * <p>
+             *     Checks if the next element exists.
+             * </p>
+             */
             @Override
             public boolean hasNext() {
                 return index < sizeList;
             }
 
+            /**
+             * <p>
+             *     Moves the cursor/iterator to next element.
+             * </p>
+             */
             @Override
             public Task next() {
                 if(Objects.equals(index, sizeList)) {
@@ -127,6 +148,11 @@ public class ArrayTaskList extends AbstractTaskList {
                 return listOfTasks[index++];
             }
 
+            /**
+             * <p>
+             *     Used to remove an element.
+             * </p>
+             */
             @Override
             public void remove() {
                 Iterator.super.remove();
@@ -134,16 +160,15 @@ public class ArrayTaskList extends AbstractTaskList {
         };
     }
 
-    @Override
-    public void forEach(Consumer<? super Task> action) {
-        super.forEach(action);
-    }
-
-    @Override
-    public Spliterator<Task> spliterator() {
-        return super.spliterator();
-    }
-
+    /**
+     * <p>
+     *     Returns a string representation of this ArrayList.
+     *     The string representation consists of an Array of Tasks mappings in the order iterated over the array.
+     *     Start with the next text "Array: ", next by the size list and continuous with " Tasks \n".
+     *     Each task are separated by the "\n", an its text start with its array index plus 1 next to " - "(space, middle dash and space).
+     * </p>
+     * @return a string representation of this array
+     */
     @Override
     public String toString(){
         StringBuilder auxStr = new StringBuilder("Array: "+ this.size() +" Tasks \n");

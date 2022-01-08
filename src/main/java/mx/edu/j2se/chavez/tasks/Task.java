@@ -4,8 +4,39 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-
-public class Task implements Cloneable {
+/**
+ * Task is a base class for all basic tasks which allow to the
+ * user create simple tasks according his necessities.
+ *
+ * A Task object encapsulate the state information related to when
+ * the task it is going to occur, and it states.
+ * This state information includes:
+ *
+ * <ul>
+ * <li>The title of the task
+ * <li>The time of starting.
+ * <li>The time of finishing.
+ * <li>The interval of time when the task it is going to occur.
+ * <li>The current state that indicate if it is an active task or not.
+ * <li>The current state that indicate if the task it is repetitive
+ * </ul>
+ * <p>
+ * Tasks can be of two types:
+ * <ul>
+ *     <li>Normal Task
+ *     <li>Repetitive Task
+ * </ul>
+ * The normal task can only happen once.
+ * Meanwhile, Repetitive Task can happen many times according to it is
+ * interval of time, and it is time of finish.
+ * At the moment of create each new object Task it is created as an
+ * inactive task.
+ *
+ * @author      Hector Chavez
+ * @version     %I%, %G%
+ * @since       1.0
+ */
+public class Task implements Cloneable, Serializable {
 
     /** The title of task */
     private String title;

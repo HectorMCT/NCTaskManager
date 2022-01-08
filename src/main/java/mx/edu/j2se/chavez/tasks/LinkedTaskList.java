@@ -2,10 +2,17 @@ package mx.edu.j2se.chavez.tasks;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.Serializable;
 import java.util.Iterator;
-import java.util.Spliterator;
-import java.util.function.Consumer;
+import java.util.NoSuchElementException;
 
+/**
+ * LinkedTaskList is a class that permit store objects from the Task class.
+ *
+ * @author      Hector Chavez
+ * @version     %I%, %G%
+ * @since       1.0
+ */
 public class LinkedTaskList extends AbstractTaskList {
 
     /** Pointer reference to the first task of the list */
@@ -107,17 +114,42 @@ public class LinkedTaskList extends AbstractTaskList {
         }
     }
 
+    /**
+     * <p>
+     *     Allows iterate over the list.
+     * </p>
+     * @return an iterator object that can be used to iterate over the list.
+     * @throws NoSuchElementException whether the iterator has no more items to iterate over
+     */
     @NotNull
     @Override
     public Iterator<Task> iterator() {
         return new Iterator<Task>(){
+
+            /**
+             * <p>
+             *     initialize pointer to head of the list for iteration.
+             * </p>
+             */
             private Node<Task> currentNode = head;
 
+
+            /**
+             * <p>
+             *     Returns false if next element does not exist.
+             * </p>
+             * @return false if the next element does not exist, true otherwise.
+             */
             @Override
             public boolean hasNext(){
                 return currentNode != null;
             }
 
+            /**
+             * <p>
+             *     Moves the cursor/iterator to next element.
+             * </p>
+             */
             @Override
             public Task next(){
 
@@ -127,6 +159,12 @@ public class LinkedTaskList extends AbstractTaskList {
                 return listTask;
             }
 
+            /**
+             * <p>
+             *     Used to remove an element.
+             * </p>
+             * @throws UnsupportedOperationException - if it is used.
+             */
             @Override
             public void remove()
             {
@@ -135,16 +173,15 @@ public class LinkedTaskList extends AbstractTaskList {
         };
     }
 
-    @Override
-    public void forEach(Consumer<? super Task> action) {
-        super.forEach(action);
-    }
-
-    @Override
-    public Spliterator<Task> spliterator() {
-        return super.spliterator();
-    }
-
+    /**
+     * <p>
+     *     Returns a string representation of this LinkedList.
+     *     The string representation consists of a list of Tasks mappings in the order returned by the list's iterator.
+     *     Start with the next text "Linked List: ", next by the size list and continuous with " Tasks \n".
+     *     Each task are separated by the "\n".
+     * </p>
+     * @return a string representation of this list
+     */
     @Override
     public String toString(){
         StringBuilder auxStr = new StringBuilder("Linked List: "+ this.size() +" Tasks \n");
@@ -154,28 +191,68 @@ public class LinkedTaskList extends AbstractTaskList {
         return auxStr.toString();
     }
 
-    static class Node<Task>{
+    /**
+     * <p>
+     *     Node is a class that encapsulate a Task class and a reference to the next class.
+     * <p/>
+     * @author      Hector Chavez
+     * @version     %I%, %G%
+     * @since       1.0
+     */
+    static class Node<Task> implements Serializable {
 
-        private Task taskListed;
+        /**
+         * <p>
+         *     Task that is be stored.
+         * <p/>
+         */
+        private final Task taskListed;
+        /**
+         * <p>
+         *     Reference to the next task.
+         * <p/>
+         */
         private Node<Task> next;
 
+        /**
+         * <p>
+         *     This is the constructor for the node of the list.
+         *     The attribute next set equals to null.
+         *     The task is stored.
+         * </p>
+         * @since 1.0
+         */
         Node(Task task){
             this.taskListed = task;
             this.next = null;
         }
 
+        /**
+         * <p>
+         *     Return the task inside the node.
+         * </p>
+         * @return The task stored in the node.
+         */
         public Task getTaskListed() {
             return taskListed;
         }
 
-        public void setTaskListed(Task taskListed) {
-            this.taskListed = taskListed;
-        }
-
+        /**
+         * <p>
+         *     Return reference to the next node in the list.
+         * </p>
+         * @return A reference to the next node.
+         */
         public Node<Task> getNext() {
             return next;
         }
 
+        /**
+         * <p>
+         *     Update the reference to the next node.
+         * </p>
+         * @param next Reference to the next node
+         */
         public void setNext(Node<Task> next) {
             this.next = next;
         }

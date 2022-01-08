@@ -204,13 +204,13 @@ public class LinkedTaskList extends AbstractTaskList {
         /**
          * <p>
          *     Task that is be stored.
-         * <p/>
+         * </p>
          */
         private final Task taskListed;
         /**
          * <p>
          *     Reference to the next task.
-         * <p/>
+         * </p>
          */
         private Node<Task> next;
 

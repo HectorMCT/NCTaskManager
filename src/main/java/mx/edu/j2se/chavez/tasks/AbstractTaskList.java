@@ -158,7 +158,7 @@ public abstract class AbstractTaskList implements Cloneable, Iterable<Task> {
      *<p>
      *     Returns the hash code value for this list.
      *     The hash code of a list is defined to be the sum of the hash codes of each Task plus the hash code of the sizeList, multiply by the prime number 1000003.
-     * <p/>
+     * </p>
      * @return the hash code value for this list
      * @since 1.0
      */
